@@ -36,4 +36,5 @@ class NetworkModule(VisualizationElement):
         self.js_code = "elements.push(" + new_element + ");"
 
     def render(self, model):
+        print("Rendering...")
         return self.portrayal_method(model.G)

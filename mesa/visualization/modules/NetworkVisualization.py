@@ -24,7 +24,7 @@ class NetworkModule(VisualizationElement):
         NetworkModule.package_includes = (
             ["NetworkModule_sigma.js", "sigma.min.js"]
             if library == "sigma"
-            else ["NetworkModule_d3.js", "d3.min.js"]
+            else ["NetworkModule_d3_custom.js", "d3.min.js"]
         )
 
         self.portrayal_method = portrayal_method

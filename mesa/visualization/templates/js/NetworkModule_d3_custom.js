@@ -75,6 +75,9 @@ var NetworkModule = function (svg_width, svg_height) {
             simulation.tick();
         }
 
+        var location = $("#location-select").val();
+        var dayPeriod = $("#time-select").val();
+        var initialColorKey = dayPeriod + "-" + location;
         links
             .selectAll("line")
             .data(graph.edges)
@@ -89,7 +92,7 @@ var NetworkModule = function (svg_width, svg_height) {
             .attr("x2", function (d) { return d.target.x; })
             .attr("y2", function (d) { return d.target.y; })
             .attr("stroke-width", function (d) { return d.width; })
-            .attr("stroke", function (d) { return d.color; });
+            .attr("stroke", function (d) { return d.color[initialColorKey]; });
 
         links
             .selectAll("line")
@@ -116,9 +119,6 @@ var NetworkModule = function (svg_width, svg_height) {
                     .style("opacity", 0);
             });
 
-        var location = $("location-select").val();
-        var dayPeriod = $("time-select").val();
-        var initialColorKey = dayPeriod + "-" + location;
 
         nodes.selectAll("circle")
             .data(graph.nodes)
@@ -128,19 +128,27 @@ var NetworkModule = function (svg_width, svg_height) {
             .attr("fill", function (d) { return d.color[initialColorKey]; })
 
         $('#location-select').on('change', function () {
-            var dayPeriod = $("time-select").val();
+            var dayPeriod = $("#time-select").val();
             var colorKey = dayPeriod + "-" + this.value
             nodes.selectAll("circle")
                 .data(graph.nodes)
                 .attr("fill", function (d) { return d.color[colorKey]; })
+            links
+                .selectAll("line")
+                .data(graph.edges)
+                .attr("stroke", function (d) { return d.color[colorKey]; });
         });
 
         $('#time-select').on('change', function () {
-            var location = $("location-select").val();
+            var location = $("#location-select").val();
             var colorKey = this.value + "-" + location
             nodes.selectAll("circle")
                 .data(graph.nodes)
                 .attr("fill", function (d) { return d.color[colorKey]; })
+            links
+                .selectAll("line")
+                .data(graph.edges)
+                .attr("stroke", function (d) { return d.color[colorKey]; });
         });
 
         nodes.selectAll("circle")

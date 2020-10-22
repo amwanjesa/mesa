@@ -57,13 +57,6 @@ var NetworkModule = function (svg_width, svg_height) {
     var nodes = g.append("g")
         .attr("class", "nodes")
 
-    $('#location-select').on('change', function () {
-        alert(this.value);
-    });
-
-    $('#time-select').on('change', function () {
-        alert(this.value);
-    });
 
 
     this.render = function (data) {
@@ -123,12 +116,32 @@ var NetworkModule = function (svg_width, svg_height) {
                     .style("opacity", 0);
             });
 
+        var location = $("location-select").val();
+        var dayPeriod = $("time-select").val();
+        var initialColorKey = dayPeriod + "-" + location;
+
         nodes.selectAll("circle")
             .data(graph.nodes)
             .attr("cx", function (d) { return d.x; })
             .attr("cy", function (d) { return d.y; })
             .attr("r", function (d) { return d.size; })
-            .attr("fill", function (d) { return d.color; })
+            .attr("fill", function (d) { return d.color[initialColorKey]; })
+
+        $('#location-select').on('change', function () {
+            var dayPeriod = $("time-select").val();
+            var colorKey = dayPeriod + "-" + this.value
+            nodes.selectAll("circle")
+                .data(graph.nodes)
+                .attr("fill", function (d) { return d.color[colorKey]; })
+        });
+
+        $('#time-select').on('change', function () {
+            var location = $("location-select").val();
+            var colorKey = this.value + "-" + location
+            nodes.selectAll("circle")
+                .data(graph.nodes)
+                .attr("fill", function (d) { return d.color[colorKey]; })
+        });
 
         nodes.selectAll("circle")
             .data(graph.nodes)
